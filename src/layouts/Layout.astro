@@ -1,0 +1,72 @@
+---
+
+import AsideMenu from "../components/AsideMenu.astro";
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang='en'>
+	<head>
+		<title>{title}</title>
+	</head>
+	<body>
+		<div id='app' class='relative h-screen p-2 gap-2'>
+			<slot />
+
+			<aside class='[grid-area:aside] flex-col flex overflow-y-auto bg-blue-100'>
+				<AsideMenu/>
+				ASIDE
+			</aside>
+
+			<main class='[grid-area:main] bg-red-200'>MAIN</main>
+
+			<footer class='[grid-area:player] bg-white'>PLAYER</footer>
+		</div>
+	</body>
+</html>
+
+<style>
+	#app {
+		display: grid;
+		grid-template-areas:
+			"aside main main"
+			"player player player";
+		grid-template-columns: 350px 1fr;
+		grid-template-rows: 1fr auto;
+	}
+</style>
+
+<style is:global>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background: #13151a;
+		background-size: 224px;
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+</style>
