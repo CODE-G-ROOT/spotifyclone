@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-const Pasue = () => (
+export const Pasue = () => (
 	<svg
 		role='img'
 		aria-hidden='true'
@@ -12,7 +12,7 @@ const Pasue = () => (
 	</svg>
 );
 
-const Play = () => (
+export const Play = () => (
 	<svg
 		role='img'
 		aria-hidden='true'
