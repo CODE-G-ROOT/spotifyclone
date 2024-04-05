@@ -1,0 +1,70 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Greating from "../../components/Greating.svelte";
+
+import { allPlaylists, songs } from "../../lib/data";
+import PlaylistItemCard from "../../components/PlaylistItemCard.astro";
+
+const { id } = Astro.params;
+const playlist = allPlaylists.find((playlist) => playlist.id === id);
+const playlistSongs = songs.find((song) => song.albumId === playlist?.albumId);
+
+---
+
+<Layout title='Spotify Clone'>
+	<div
+		id='playlist-container'
+		class='relative flex flex-col h-full bg-zin-900 overflow-x-hidden'
+		transition:name=`playlist ${id} box`
+	>
+		<!-- PAGEHEADER -->
+
+		<header class='flex flex-row gap-8 px-6 py-8'>
+			<picture class='aspect-square w-52 h-52 flex-none'>
+				<img
+					src={playlist?.cover}
+					alt={`Cover of ${playlist?.title}`}
+					class='object-cover w-full h-full rounded-sm shadow-2xl	'
+					transition:name=`playlist ${id} image`
+				/>
+			</picture>
+
+			<div class='flex flex-col justify-between'>
+				<h2 class='flex flex-1 items-end'>Playlist</h2>
+
+				<div>
+					<h1 class="title-clamp text-6xl text-start font-bold block">
+						<span transition:name=`playlist ${playlist?.id} title`>
+							{playlist?.title}
+
+						</span>
+					</h1>
+				</div>
+
+				<div class="flex flex-1 items-end">
+					<div class="text-sm text-gray-300 font-normal">
+						<div transition:name=`playlist ${playlist?.id} artists`>
+							<span>{playlist?.artists.join(', ')}</span>
+						</div>
+						<p class="mt-1">
+							<span class="text-white-50">
+								50 canciones 
+							</span>
+							3 h aproximadamente
+						</p>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- PAGE HEADER -->
+
+		<div class='relative z-10 px-6 pt-10'>
+			<Greating/>
+		</div>
+
+		<div class='absolute inset-0 bg-gradient-to-t from-zinc-900 to-zin-900/80 -z-10'>
+		</div>
+	</div>
+</Layout>
+
+<style></style>

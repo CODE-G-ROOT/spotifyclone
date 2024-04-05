@@ -1,10 +1,32 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Greating from "../components/Greating.svelte";
+import PlaylistItemCard from "../components/PlaylistItemCard.astro";
+import Layout from "../layouts/Layout.astro";
+import { playlists } from "../lib/data";
 ---
 
-<Layout title="Spotify Clone">
-	
+<Layout title='Spotify Clone'>
+	<div
+		id='playlist-container'
+		class='relative transition-all duration-1000 bg-[#1b0e12]'
+	>
+		<!-- PAGE HEADER -->
+
+		<div class='relative z-10 px-6 pt-10'>
+			<!-- GREATING -->
+
+			<Greating/>
+
+      <div class="flex flex-wrap mt-6 ">
+        {playlists.map((playlist) => <PlaylistItemCard playlist={playlist} />)}
+      </div>
+
+		</div>
+
+    <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-zin-900/80">
+
+    </div>
+	</div>
 </Layout>
 
-<style>
-</style>
+<style></style>
