@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { usePlayerStore } from "../store/platylistStore";
 
-export const Pasue = () => (
+export const Pause = () => (
 	<svg
 		role='img'
 		aria-hidden='true'
@@ -25,7 +26,7 @@ export const Play = () => (
 );
 
 export const Player = () => {
-	const [isPlaying, setIsPlaying] = useState(false);
+	const { isPlaying, setIsPlaying } = usePlayerStore(state => state);
 	const [currentSong, setCurrentSong] = useState(null);
 	const audioRef = useRef();
 
@@ -55,7 +56,7 @@ export const Player = () => {
 						className='bg-white rounded-full p-2'
 						onClick={() => handleClick()}
 					>
-						{isPlaying ? <Pasue /> : <Play />}
+						{isPlaying ? <Pause /> : <Play />}
 					</button>
 				</div>
 			</div>
