@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { usePlayerStore } from "../store/platylistStore";
+import { usePlayerStore } from "../store/playerStore";
 
 export const Pause = () => (
 	<svg
@@ -26,24 +26,28 @@ export const Play = () => (
 );
 
 export const Player = () => {
-	const { isPlaying, setIsPlaying } = usePlayerStore(state => state);
-	const [currentSong, setCurrentSong] = useState(null);
+	const { currentMusic ,isPlaying, setIsPlaying } = usePlayerStore(state => state);
 	const audioRef = useRef();
 
-	useEffect (() => {
-		audioRef.current.src = `/music/1/01.mp3`;
-	}, []);
+	useEffect(() => {
+		isPlaying 
+			? audioRef.current.play()
+			: audioRef.current.pause()
+	}, [isPlaying]);
 
-	const handleClick = () => {
-		if (isPlaying) {
-			audioRef.current.pause();
-		} else {
-			audioRef.current.play();
-			audioRef.current.volume = 0.5
+	useEffect (() => {
+		const {song, playlist, songs} = currentMusic;
+		if(song) {
+			const src = `/music/${playlist?.id}/0${song.id}.mp3`;
+			audioRef.current.src = src;
+			audioRef.current.play()
 		}
 
+	}, [currentMusic])
+
+	const handleClick = () => {
 		setIsPlaying(!isPlaying);
-	}
+	};
 
 
 	return (
