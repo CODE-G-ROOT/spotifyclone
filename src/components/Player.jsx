@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePlayerStore } from "../store/playerStore";
 import { Slider } from "./Slider";
+import { FullSound, LittleBitSound, MiddleSound, VolumeSilence } from "../icons/Sound";
 
 export const Pause = () => (
 	<svg role='img' aria-hidden='true' viewBox='0 0 16 16' width='16' height='16'>
@@ -14,6 +15,38 @@ export const Play = () => (
 	</svg>
 );
 
+const VolumeControl = () => {
+	const { volume, setVolume } = usePlayerStore((state) => state);
+	console.log(volume);
+
+	return (
+		<div className='flex justify-center align-middle gap-x-2'>
+			<button className="w-4 h-auto items-center text-stone-400">
+			{
+				volume < 0.1 
+					? <VolumeSilence />
+					: (volume > 0.1 && volume <= 40 )
+					? <LittleBitSound/>
+					: (volume > 40 && volume < 80)
+							? <MiddleSound/>
+							: <FullSound/>
+						}
+			</button>
+			<Slider
+				defaultValue={[100]}
+				max={100}
+				min={0}
+				className='w-[100px]'
+				onValueChange={(value) => {
+					const [newVolume] = value;
+					const volumeValue = newVolume / 100;
+					setVolume(newVolume);
+				}}
+			/>
+		</div>
+	);
+};
+
 const CurrentSong = ({ image, title, artists }) => {
 	return (
 		<div
@@ -24,9 +57,9 @@ const CurrentSong = ({ image, title, artists }) => {
 				<img src={image} alt={title} />
 			</picture>
 
-			<div className="flex flex-col">
+			<div className='flex flex-col'>
 				<h3 className='font-semibold text-sm block'>{title}</h3>
-				<span className="text-xs opacity-80">{artists?.join(', ')}</span>
+				<span className='text-xs opacity-80'>{artists?.join(", ")}</span>
 			</div>
 		</div>
 	);
@@ -75,22 +108,8 @@ export const Player = () => {
 				</div>
 			</div>
 
-			<div className='grid place-content-center'>
-				<Slider
-					defaultValue={[100]}
-					max={100}
-					min={0}
-					className="w-[100px]"
-					onValueChange={(value) => {
-						const [newVolume] = value;
-						const volumeValue = newVolume / 100;
-						volumeRef.current = volumeValue;
-						audioRef.current.volume = volumeValue;
-					}}
-				
-				/>
-			</div>
-
+			<div className='grid place-content-center'></div>
+			<VolumeControl/>
 			<audio ref={audioRef} />
 		</div>
 	);
