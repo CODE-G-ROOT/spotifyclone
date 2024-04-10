@@ -12,20 +12,17 @@ import { playlists } from "../lib/data";
 	>
 		<!-- PAGE HEADER -->
 
-		<div class='relative z-10 px-2 pt-10'>
-			<!-- GREATING -->
-
-			<Greating/>
-
-      <div class="flex flex-wrap mt-6 ">
-        {playlists.map((playlist) => <PlaylistItemCard playlist={playlist} />)}
-      </div>
-
+		<div class='relative flex flex-col items-center z-10 px-2 pt-10'>
+			<div class="px-7 w-full">
+				<Greating />
+			</div>
+			<div class='flex flex-wrap'>
+				{playlists.map((playlist) => <PlaylistItemCard playlist={playlist} />)}
+			</div>
 		</div>
 
-    <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-zin-900/80">
-
-    </div>
+		<div class='absolute inset-0 bg-gradient-to-t from-zinc-900 to-zin-900/80'>
+		</div>
 	</div>
 </Layout>
 

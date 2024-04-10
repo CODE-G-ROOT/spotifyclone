@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { usePlayerStore } from "../store/playerStore";
 import { Slider } from "./Slider";
-import { FullSound, LittleBitSound, MiddleSound, VolumeSilence } from "../icons/Sound";
+import {
+	FullSound,
+	LittleBitSound,
+	MiddleSound,
+	VolumeSilence,
+} from "../icons/Sound";
 
 export const Pause = () => (
 	<svg role='img' aria-hidden='true' viewBox='0 0 16 16' width='16' height='16'>
@@ -16,31 +21,48 @@ export const Play = () => (
 );
 
 const VolumeControl = () => {
-	const { volume, setVolume } = usePlayerStore((state) => state);
-	console.log(volume);
+	const { setVolume, volume } = usePlayerStore((state) => state);
+	const previousVolumeRef = useRef(volume);
+
+	const isVolumeSilence = volume < 0.1;
+
+	const handleClickVolume = () => {
+		console.log(isVolumeSilence);
+		if (isVolumeSilence) {
+			setVolume(previousVolumeRef.current);
+		} else {
+			previousVolumeRef.current = volume;
+			setVolume(0);
+		}
+	};
 
 	return (
 		<div className='flex justify-center align-middle gap-x-2'>
-			<button className="w-4 h-auto items-center text-stone-400">
-			{
-				volume < 0.1 
-					? <VolumeSilence />
-					: (volume > 0.1 && volume <= 40 )
-					? <LittleBitSound/>
-					: (volume > 40 && volume < 80)
-							? <MiddleSound/>
-							: <FullSound/>
-						}
+			<button
+				className='w-4 h-auto items-center opacity-70 hover:opacity-100 transition'
+				onClick={handleClickVolume}
+			>
+				{volume === 0.0 ? (
+					<VolumeSilence />
+				) : volume > 0 && volume <= 0.4 ? (
+					<LittleBitSound />
+				) : volume > 0.4 && volume < 0.8 ? (
+					<MiddleSound />
+				) : (
+					<FullSound />
+				)}
 			</button>
 			<Slider
 				defaultValue={[100]}
 				max={100}
 				min={0}
+				value={[volume * 100]}
 				className='w-[100px]'
+				// value={currentValue}
 				onValueChange={(value) => {
 					const [newVolume] = value;
 					const volumeValue = newVolume / 100;
-					setVolume(newVolume);
+					setVolume(volumeValue);
 				}}
 			/>
 		</div>
@@ -66,23 +88,26 @@ const CurrentSong = ({ image, title, artists }) => {
 };
 
 export const Player = () => {
-	const { currentMusic, isPlaying, setIsPlaying } = usePlayerStore(
+	const { currentMusic, isPlaying, setIsPlaying, volume } = usePlayerStore(
 		(state) => state
 	);
 
 	const audioRef = useRef();
-	const volumeRef = useRef(1);
 
 	useEffect(() => {
 		isPlaying ? audioRef.current.play() : audioRef.current.pause();
 	}, [isPlaying]);
 
 	useEffect(() => {
+		audioRef.current.volume = volume;
+	}, [volume]);
+
+	useEffect(() => {
 		const { song, playlist, songs } = currentMusic;
 		if (song) {
 			const src = `/music/${playlist?.id}/0${song.id}.mp3`;
 			audioRef.current.src = src;
-			audioRef.current.volume = volumeRef.current;
+			audioRef.current.volume = volume;
 			audioRef.current.play();
 		}
 	}, [currentMusic]);
@@ -109,7 +134,7 @@ export const Player = () => {
 			</div>
 
 			<div className='grid place-content-center'></div>
-			<VolumeControl/>
+			<VolumeControl />
 			<audio ref={audioRef} />
 		</div>
 	);
