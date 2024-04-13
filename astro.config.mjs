@@ -3,11 +3,11 @@ import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
 import react from "@astrojs/react";
 
-import cloudflare from "@astrojs/cloudflare";
+import { defineConfig } from 'astro/config'
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), svelte(), react()],
   output: "server",
-  adapter: cloudflare()
+  adapter: cloudflare(),
+  site: 'https://CODE-G-ROOT.github.io',
 });
