@@ -8,6 +8,5 @@ import { defineConfig } from 'astro/config'
 export default defineConfig({
   integrations: [tailwind(), svelte(), react()],
   output: "server",
-  adapter: cloudflare(),
   site: 'https://CODE-G-ROOT.github.io',
 });
