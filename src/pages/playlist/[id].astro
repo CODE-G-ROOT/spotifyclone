@@ -1,14 +1,16 @@
 ---
+import MusicsTable from "../../components/MusicsTable.astro";
 import Layout from "../../layouts/Layout.astro";
-import Greating from "../../components/Greating.svelte";
 
 import { allPlaylists, songs } from "../../lib/data";
-import PlaylistItemCard from "../../components/PlaylistItemCard.astro";
+import { CardPlayButton } from "../../components/CardPlayButton";
 
 const { id } = Astro.params;
-const playlist = allPlaylists.find((playlist) => playlist.id === id);
-const playlistSongs = songs.find((song) => song.albumId === playlist?.albumId);
 
+const playlist = allPlaylists.find((playlist) => playlist.id === id);
+const playlistSongs = songs.filter(
+	(song) => song.albumId === playlist?.albumId
+);
 ---
 
 <Layout title='Spotify Clone'>
@@ -24,7 +26,7 @@ const playlistSongs = songs.find((song) => song.albumId === playlist?.albumId);
 				<img
 					src={playlist?.cover}
 					alt={`Cover of ${playlist?.title}`}
-					class='object-cover w-full h-full rounded-sm shadow-2xl	'
+					class='object-cover w-full h-full rounded-sm shadow-2xl'
 					transition:name=`playlist ${id} image`
 				/>
 			</picture>
@@ -33,22 +35,21 @@ const playlistSongs = songs.find((song) => song.albumId === playlist?.albumId);
 				<h2 class='flex flex-1 items-end'>Playlist</h2>
 
 				<div>
-					<h1 class="title-clamp text-6xl text-start font-bold block">
+					<h1 class='title-clamp text-6xl text-start font-bold block'>
 						<span transition:name=`playlist ${playlist?.id} title`>
 							{playlist?.title}
-
 						</span>
 					</h1>
 				</div>
 
-				<div class="flex flex-1 items-end">
-					<div class="text-sm text-gray-300 font-normal">
+				<div class='flex flex-1 items-end'>
+					<div class='text-sm text-gray-300 font-normal'>
 						<div transition:name=`playlist ${playlist?.id} artists`>
-							<span>{playlist?.artists.join(', ')}</span>
+							<span>{playlist?.artists.join(", ")}</span>
 						</div>
-						<p class="mt-1">
-							<span class="text-white-50">
-								50 canciones 
+						<p class='mt-1'>
+							<span class='text-white-50'>
+								{playlistSongs.length} canciones
 							</span>
 							3 h aproximadamente
 						</p>
@@ -58,12 +59,18 @@ const playlistSongs = songs.find((song) => song.albumId === playlist?.albumId);
 		</header>
 		<!-- PAGE HEADER -->
 
-		<div class='relative z-10 px-6 pt-10'>
-			<Greating/>
+		<div class='mx-6 w-auto'>
+			<CardPlayButton id={id} client:load size="large"/>
 		</div>
 
-		<div class='absolute inset-0 bg-gradient-to-t from-zinc-900 to-zin-900/80 -z-10'>
+		<div
+			class='absolute inset-0 bg-gradient-to-t from-zinc-900 to-zin-900/80 -z-10'
+		>
 		</div>
+
+		<section class='p-4'>
+			<MusicsTable songs={playlistSongs} />
+		</section>
 	</div>
 </Layout>
 
