@@ -30,3 +30,5 @@ Clona este repositorio: git clone https://github.com/CODE-G-ROOT/spotifyclone.gi
 3. Ejecuta el proyecto:  `pnpm dev`
 
 Visita `http://localhost:4321` en tu navegador para ver la aplicación en funcionamiento.
+
+> <p><u>Para dejar en claro.</u></p> Esta aplicación no es de mi total propiead. Está echa en base a la creada en directo por el Streamer y Desarrollador Senior Midudev
